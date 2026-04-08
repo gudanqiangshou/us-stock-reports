@@ -9,794 +9,1862 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #08090f;
-      --bg-card: #10131c;
-      --bg-card-hover: #161a28;
-      --bg-inset: #0c0e16;
-      --border: #1a1e2e;
-      --border-accent: #252a3a;
-      --text-1: #e8ecf4;
-      --text-2: #8b92a8;
-      --text-3: #555c72;
-      --gold: #e5a91a;
-      --gold-dim: rgba(229,169,26,0.12);
-      --up: #00d4aa;
-      --up-bg: rgba(0,212,170,0.10);
-      --down: #ff4d6a;
-      --down-bg: rgba(255,77,106,0.10);
-      --blue: #4a90ff;
-      --blue-dim: rgba(74,144,255,0.12);
-      --purple: #9b6dff;
-      --purple-dim: rgba(155,109,255,0.10);
-      --cyan: #00c9db;
-      --orange: #ff9f43;
+      --bg: #08090f; --bg-card: #10131c; --bg-card-hover: #161a28;
+      --bg-inset: #0c0e16; --border: #1a1e2e; --border-accent: #252a3a;
+      --text-1: #e8ecf4; --text-2: #8b92a8; --text-3: #555c72;
+      --gold: #e5a91a; --gold-dim: rgba(229,169,26,0.12);
+      --up: #00d4aa; --up-bg: rgba(0,212,170,0.10);
+      --down: #ff4d6a; --down-bg: rgba(255,77,106,0.10);
+      --blue: #4a90ff; --blue-dim: rgba(74,144,255,0.12);
+      --purple: #9b6dff; --purple-dim: rgba(155,109,255,0.10);
+      --cyan: #00c9db; --cyan-dim: rgba(0,201,219,0.12);
+      --orange: #ff9f43; --orange-dim: rgba(255,159,67,0.10);
       --font-head: 'Outfit', 'Noto Sans SC', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
       --font-body: 'Noto Sans SC', 'Outfit', sans-serif;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg);
-      color: var(--text-1);
-      font-family: var(--font-body);
-      font-size: 12px;
-      line-height: 1.45;
-      -webkit-font-smoothing: antialiased;
-    }
-    .dash { max-width: 1280px; margin: 0 auto; padding: 16px 20px 24px; }
+    body { background: var(--bg); color: var(--text-1); font-family: var(--font-body); font-size: 12px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+    .dash { max-width: 1400px; margin: 0 auto; padding: 16px 20px 24px; }
+
+    /* ── Global Nav ── */
+    .gnav { display: flex; align-items: center; gap: 4px; margin-bottom: 14px; background: var(--bg-inset); border: 1px solid var(--border); border-radius: 10px; padding: 4px; width: fit-content; }
+    .gnav-btn { padding: 7px 20px; border: none; border-radius: 7px; cursor: pointer; font-family: var(--font-head); font-size: 12px; font-weight: 600; color: var(--text-3); background: transparent; transition: all 0.2s; letter-spacing: 0.3px; }
+    .gnav-btn:hover { color: var(--text-2); }
+    .gnav-btn.active { background: var(--gold-dim); color: var(--gold); box-shadow: 0 1px 4px rgba(229,169,26,0.15); }
+    .section-wrap { display: none; }
+    .section-wrap.active { display: block; }
 
     /* ── Header ── */
-    .hdr {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-bottom: 10px; margin-bottom: 12px; border-bottom: 1px solid var(--border);
-    }
+    .hdr { display: flex; align-items: center; justify-content: space-between; padding-bottom: 10px; margin-bottom: 12px; border-bottom: 1px solid var(--border); }
     .hdr-title { font-family: var(--font-head); font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
     .hdr-title em { font-style: normal; color: var(--gold); }
     .hdr-sub { font-family: var(--font-mono); font-size: 10px; color: var(--text-3); margin-top: 2px; }
     .hdr-right { font-family: var(--font-mono); font-size: 10px; color: var(--text-3); text-align: right; }
 
     /* ── Section label ── */
-    .stag {
-      font-family: var(--font-head); font-size: 11px; font-weight: 600;
-      color: var(--text-3); letter-spacing: 1px; margin-bottom: 6px;
-      display: flex; align-items: center; gap: 6px;
-    }
+    .stag { font-family: var(--font-head); font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
     .stag::before { content: ''; width: 3px; height: 10px; background: var(--gold); border-radius: 1px; }
 
     /* ── Indices ── */
     .idx-section { margin-bottom: 12px; }
     .idx-row { display: flex; gap: 1px; background: var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 2px; }
-    .idx-row:last-child { margin-bottom: 0; }
-    .idx-cell {
-      flex: 1; background: var(--bg-card); padding: 7px 6px; text-align: center;
-      min-width: 0; transition: background 0.15s;
-    }
+    .idx-cell { flex: 1; background: var(--bg-card); padding: 7px 6px; text-align: center; min-width: 0; transition: background 0.15s; }
     .idx-cell:first-child { border-radius: 8px 0 0 8px; }
     .idx-cell:last-child { border-radius: 0 8px 8px 0; }
     .idx-cell:hover { background: var(--bg-card-hover); }
-    .idx-name { font-size: 9px; color: var(--text-3); letter-spacing: 0.3px; margin-bottom: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .idx-name { font-size: 9px; color: var(--text-3); letter-spacing: 0.3px; margin-bottom: 1px; }
     .idx-num { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--text-1); }
     .idx-chg { font-family: var(--font-mono); font-size: 9px; margin-top: 1px; }
-    .c-up { color: var(--up); }
-    .c-dn { color: var(--down); }
-    .c-flat { color: var(--text-3); }
+    .c-up { color: var(--up); } .c-dn { color: var(--down); } .c-flat { color: var(--text-3); }
 
     /* ── Stock Table ── */
     .tbl-wrap { margin-bottom: 12px; overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
     .tbl { width: 100%; border-collapse: collapse; font-size: 11.5px; }
-    .tbl thead th {
-      font-family: var(--font-head); font-size: 9px; font-weight: 600; color: var(--text-3);
-      letter-spacing: 0.5px; padding: 6px 8px; text-align: right; white-space: nowrap;
-      background: var(--bg-inset); border-bottom: 1px solid var(--border);
-    }
+    .tbl thead th { font-family: var(--font-head); font-size: 9px; font-weight: 600; color: var(--text-3); letter-spacing: 0.5px; padding: 6px 8px; text-align: right; white-space: nowrap; background: var(--bg-inset); border-bottom: 1px solid var(--border); }
     .tbl thead th:first-child { text-align: left; padding-left: 10px; }
     .tbl tbody tr { transition: background 0.12s; }
     .tbl tbody tr:hover { background: var(--bg-card-hover); }
-    .tbl tbody td {
-      padding: 5px 8px; text-align: right; font-family: var(--font-mono);
-      font-weight: 500; font-size: 11px; border-bottom: 1px solid var(--border);
-    }
-    .tbl tbody td:first-child {
-      text-align: left; padding-left: 10px; font-family: var(--font-body);
-      font-weight: 600; font-size: 12px;
-    }
+    .tbl tbody td { padding: 5px 8px; text-align: right; font-family: var(--font-mono); font-weight: 500; font-size: 11px; border-bottom: 1px solid var(--border); white-space: nowrap; color: var(--text-2); }
+    .tbl tbody td:first-child { text-align: left; padding-left: 10px; font-family: var(--font-body); font-weight: 600; color: var(--text-1); }
     .tbl tbody tr:last-child td { border-bottom: none; }
-    .sym { color: var(--text-1); }
-    .sym-name { color: var(--text-3); font-size: 9px; font-weight: 400; margin-left: 4px; }
-    .sector-tag {
-      display: inline-block; font-size: 8px; padding: 1px 4px; border-radius: 3px;
-      background: var(--blue-dim); color: var(--blue); margin-left: 4px; vertical-align: middle;
-    }
-    .sector-中概股 { background: var(--down-bg); color: var(--down); }
-    .sector-半导体 { background: var(--purple-dim); color: var(--purple); }
-    .sector-ETF { background: var(--gold-dim); color: var(--gold); }
-    .sector-支付 { background: rgba(0,201,219,0.10); color: var(--cyan); }
-    .sector-金融科技 { background: rgba(255,159,67,0.10); color: var(--orange); }
+    .pill { display: inline-block; padding: 0 5px; border-radius: 3px; font-size: 10px; font-weight: 600; line-height: 18px; }
+    .pill-up { background: var(--up-bg); color: var(--up); }
+    .pill-dn { background: var(--down-bg); color: var(--down); }
 
-    /* ── 52W Bar ── */
-    .w52-bar {
-      width: 60px; height: 4px; background: var(--border); border-radius: 2px;
-      position: relative; display: inline-block; vertical-align: middle;
-    }
-    .w52-dot {
-      width: 6px; height: 6px; border-radius: 50%; background: var(--gold);
-      position: absolute; top: -1px; transform: translateX(-50%);
-    }
+    /* ── Sector Tags ── */
+    .sector-tag { display: inline-block; font-size: 8px; padding: 1px 4px; border-radius: 3px; vertical-align: middle; margin-left: 4px; }
+    .stag-科技 { background: var(--blue-dim); color: var(--blue); }
+    .stag-ETF { background: var(--gold-dim); color: var(--gold); }
+    .stag-半导体 { background: var(--purple-dim); color: var(--purple); }
+    .stag-金融科技 { background: var(--orange-dim); color: var(--orange); }
+    .stag-中概股 { background: var(--down-bg); color: var(--down); }
+    .stag-支付 { background: var(--cyan-dim); color: var(--cyan); }
 
-    /* ── Sector Summary ── */
-    .sector-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; margin-bottom: 12px; }
-    .sector-card {
-      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
-      padding: 10px 12px; transition: background 0.15s;
-    }
+    /* ── Sector Grid ── */
+    .sector-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px; margin-bottom: 12px; }
+    .sector-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; transition: background 0.15s; }
     .sector-card:hover { background: var(--bg-card-hover); }
     .sector-name { font-family: var(--font-head); font-size: 11px; font-weight: 600; color: var(--text-2); margin-bottom: 4px; }
     .sector-avg { font-family: var(--font-mono); font-size: 14px; font-weight: 600; }
     .sector-detail { font-size: 10px; color: var(--text-3); margin-top: 2px; }
 
-    /* ── Footer ── */
-    .footer {
-      text-align: center; padding: 16px 0; margin-top: 12px;
-      border-top: 1px solid var(--border); font-size: 10px; color: var(--text-3);
-    }
+    /* ── 52W Bar ── */
+    .w52-bar { width: 50px; height: 4px; background: var(--border); border-radius: 2px; position: relative; display: inline-block; vertical-align: middle; }
+    .w52-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); position: absolute; top: -1px; transform: translateX(-50%); }
 
-    /* ── Responsive ── */
+    /* ── Top Movers ── */
+    .movers-row { display: flex; gap: 6px; margin-bottom: 12px; }
+    .movers-card { flex: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+    .movers-title { font-size: 10px; font-weight: 600; margin-bottom: 4px; }
+    .movers-item { display: flex; justify-content: space-between; padding: 2px 0; font-size: 11px; }
+    .movers-item span:first-child { font-weight: 600; }
+    .movers-item span:last-child { font-family: var(--font-mono); }
+
+    /* ── Research tabs ── */
+    .r-tabs { display: flex; gap: 2px; margin-bottom: 16px; overflow-x: auto; }
+    .r-tab { padding: 6px 14px; border: none; background: none; color: var(--text-3); font-family: var(--font-body); font-size: 12px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
+    .r-tab:hover { color: var(--text-2); }
+    .r-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .r-panel { display: none; }
+    .r-panel.active { display: block; }
+
+    /* ── Research card ── */
+    .r-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 12px; overflow-x: auto; }
+    .r-card-title { font-family: var(--font-head); font-size: 13px; font-weight: 600; color: var(--text-1); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+
+    /* ── Research table ── */
+    .r-tbl { width: 100%; border-collapse: collapse; font-size: 11px; white-space: nowrap; }
+    .r-tbl th { text-align: left; padding: 6px 8px; font-weight: 600; color: var(--text-3); font-size: 10px; border-bottom: 1px solid var(--border-accent); letter-spacing: 0.4px; position: sticky; top: 0; background: var(--bg-card); }
+    .r-tbl td { padding: 5px 8px; border-bottom: 1px solid var(--border); font-family: var(--font-mono); font-size: 11px; color: var(--text-1); }
+    .r-tbl td.lbl { font-family: var(--font-body); color: var(--text-2); font-weight: 500; }
+    .r-tbl tr:hover td { background: var(--bg-card-hover); }
+    .r-sticky { position: sticky; left: 0; background: var(--bg-card); z-index: 2; min-width: 120px; }
+    .r-tbl tr:hover .r-sticky { background: var(--bg-card-hover); }
+    .r-sect td { background: var(--bg-inset) !important; font-family: var(--font-head); font-weight: 600; color: var(--gold); font-size: 11px; }
+    .v-g { color: var(--up); } .v-b { color: var(--down); } .v-w { color: var(--orange); }
+    .v-best { color: var(--up); font-weight: 700; }
+    .na-cell { color: var(--text-3); text-align: center; }
+
+    /* ── Earnings Calendar ── */
+    .earn-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .earn-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; background: var(--blue-dim); border: 1px solid rgba(74,144,255,0.2); border-radius: 6px; font-size: 11px; color: var(--blue); white-space: nowrap; }
+    .earn-chip .ec-name { font-weight: 600; color: var(--text-1); }
+    .earn-chip .ec-date { font-family: var(--font-mono); font-size: 10px; }
+
+    /* ── Framework ── */
+    .fw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 10px; }
+    .fw-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+    .fw-card h3 { font-family: var(--font-head); font-size: 13px; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .fw-badge { font-size: 9px; padding: 2px 7px; border-radius: 4px; font-family: var(--font-mono); font-weight: 600; }
+    .mg h5 { font-size: 10px; color: var(--gold); font-weight: 600; margin: 8px 0 3px; letter-spacing: 0.4px; }
+    .ml { list-style: none; }
+    .ml li { font-size: 11px; color: var(--text-2); padding: 2px 0; }
+    .ml li::before { content: "\2022 "; color: var(--text-3); }
+    .ml .star { color: var(--gold); font-weight: 700; }
+
+    /* ── Footer ── */
+    .ftr { text-align: center; font-size: 10px; color: var(--text-3); padding-top: 8px; border-top: 1px solid var(--border); font-family: var(--font-mono); margin-top: 16px; }
+
     @media (max-width: 768px) {
-      .dash { padding: 10px 12px; }
-      .idx-cell { padding: 5px 3px; }
-      .idx-num { font-size: 10px; }
-      .tbl { font-size: 10px; }
-      .sector-grid { grid-template-columns: repeat(2, 1fr); }
+      .dash { padding: 10px 12px; } .idx-cell { padding: 5px 3px; } .idx-num { font-size: 10px; }
+      .sector-grid { grid-template-columns: repeat(2, 1fr); } .fw-grid { grid-template-columns: 1fr; }
+      .movers-row { flex-direction: column; }
     }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .ani { animation: slideIn 0.35s ease-out forwards; opacity: 0; }
   </style>
 </head>
 <body>
 <div class="dash">
-  <!-- Header -->
-  <div class="hdr">
-    <div>
-      <div class="hdr-title"><em>US</em>.Monitor</div>
-      <div class="hdr-sub">2026-04-08（周三）｜数据截至 2026-04-07 收盘</div>
-    </div>
-    <div class="hdr-right">
-      Generated 2026-04-08 17:29:25<br>
-      US Stock Daily Report
-    </div>
+
+  <!-- GLOBAL NAV -->
+  <div class="gnav">
+    <button class="gnav-btn active" onclick="switchSection('report')">投资晨报</button>
+    <button class="gnav-btn" onclick="switchSection('research')">持仓研究</button>
   </div>
 
-  <!-- Indices -->
-  <div class="stag">MARKET INDICES</div>
-  <div class="idx-section">
-    <div class="idx-row">
-      
-      
-      <div class="idx-cell">
-        <div class="idx-name">标普500</div>
-        <div class="idx-num">6,616.85</div>
-        
-        <div class="idx-chg c-up">
-          +0.52%
-        </div>
-      </div>
-      
-      
-      <div class="idx-cell">
-        <div class="idx-name">纳斯达克</div>
-        <div class="idx-num">22,017.85</div>
-        
-        <div class="idx-chg c-up">
-          +0.63%
-        </div>
-      </div>
-      
-      
-      <div class="idx-cell">
-        <div class="idx-name">道琼斯</div>
-        <div class="idx-num">46,584.46</div>
-        
-        <div class="idx-chg c-up">
-          +0.17%
-        </div>
-      </div>
-      
-    </div>
-    <div class="idx-row">
-      
-      
-      <div class="idx-cell">
-        <div class="idx-name">VIX恐慌指数</div>
-        <div class="idx-num">20.26</div>
-        
-        <div class="idx-chg c-dn">
-          -21.41%
-        </div>
-      </div>
-      
-      
-      <div class="idx-cell">
-        <div class="idx-name">美债10年期</div>
-        <div class="idx-num">4.34</div>
-        
-        <div class="idx-chg c-up">
-          +0.18%
-        </div>
-      </div>
-      
-      
-      <div class="idx-cell">
-        <div class="idx-name">美元指数</div>
-        <div class="idx-num">98.82</div>
-        
-        <div class="idx-chg c-dn">
-          -0.82%
-        </div>
-      </div>
-      
-    </div>
-  </div>
+  <!-- ====== SECTION: 投资晨报 ====== -->
+  <div id="sec-report" class="section-wrap active">
 
-  <!-- Sector Summary -->
-  <div class="stag">SECTOR OVERVIEW</div>
-  <div class="sector-grid">
-    
-    <div class="sector-card">
-      <div class="sector-name">科技</div>
-      
-      <div class="sector-avg c-up">
-        +5.06%
+    <header class="hdr ani">
+      <div>
+        <div class="hdr-title"><em>US</em>.Monitor 投资晨报</div>
+        <div class="hdr-sub">2026-04-07 周三 收盘数据</div>
       </div>
-      <div class="sector-detail">
-        6 只 ｜
-        
-        5 涨 1 跌
-      </div>
-    </div>
-    
-    <div class="sector-card">
-      <div class="sector-name">ETF</div>
-      
-      <div class="sector-avg c-up">
-        +5.43%
-      </div>
-      <div class="sector-detail">
-        1 只 ｜
-        
-        1 涨 0 跌
-      </div>
-    </div>
-    
-    <div class="sector-card">
-      <div class="sector-name">半导体</div>
-      
-      <div class="sector-avg c-up">
-        +11.46%
-      </div>
-      <div class="sector-detail">
-        2 只 ｜
-        
-        2 涨 0 跌
-      </div>
-    </div>
-    
-    <div class="sector-card">
-      <div class="sector-name">金融科技</div>
-      
-      <div class="sector-avg c-up">
-        +5.79%
-      </div>
-      <div class="sector-detail">
-        2 只 ｜
-        
-        2 涨 0 跌
-      </div>
-    </div>
-    
-    <div class="sector-card">
-      <div class="sector-name">中概股</div>
-      
-      <div class="sector-avg c-dn">
-        -0.36%
-      </div>
-      <div class="sector-detail">
-        2 只 ｜
-        
-        1 涨 1 跌
-      </div>
-    </div>
-    
-    <div class="sector-card">
-      <div class="sector-name">支付</div>
-      
-      <div class="sector-avg c-up">
-        +0.94%
-      </div>
-      <div class="sector-detail">
-        2 只 ｜
-        
-        2 涨 0 跌
-      </div>
-    </div>
-    
-  </div>
+      <div class="hdr-right">报告日期 2026-04-08<br>生成时间 2026-04-08 17:48:09</div>
+    </header>
 
-  <!-- Stock Table -->
-  <div class="stag">HOLDINGS</div>
-  <div class="tbl-wrap">
-    <table class="tbl">
-      <thead>
-        <tr>
-          <th>股票</th>
-          <th>最新价</th>
-          <th>涨跌</th>
-          <th>涨跌%</th>
-          <th>成交量</th>
-          <th>日高/低</th>
-          <th>52W 位置</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-        
-        <tr>
-          <td>
-            <span class="sym">NVDA</span>
-            <span class="sym-name">英伟达</span>
-            <span class="sector-tag sector-科技">科技</span>
-          </td>
-          <td>178.10</td>
+    <!-- 市场指数 -->
+    <div class="ani" style="animation-delay:0.03s">
+      <div class="stag">MARKET INDICES</div>
+      <div class="idx-section">
+        <div class="idx-row">
           
-          <td class="c-up">+12.93</td>
-          <td class="c-up">+7.83%</td>
-          <td>126.9M</td>
-          <td style="font-size:10px;">
-            
-              178.21 / 173.66
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:71%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">71%</span>
-            
-          </td>
-        </tr>
-        
-        
-        
-        <tr>
-          <td>
-            <span class="sym">AAPL</span>
-            <span class="sym-name">苹果</span>
-            <span class="sector-tag sector-科技">科技</span>
-          </td>
-          <td>253.50</td>
           
-          <td class="c-up">+6.87</td>
-          <td class="c-up">+2.79%</td>
-          <td>61.4M</td>
-          <td style="font-size:10px;">
+          <div class="idx-cell">
+            <div class="idx-name">标普500</div>
+            <div class="idx-num">6,616.85</div>
             
-              256.19 / 245.70
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:70%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">70%</span>
-            
-          </td>
-        </tr>
-        
-        
-        
-        <tr>
-          <td>
-            <span class="sym">TSLA</span>
-            <span class="sym-name">特斯拉</span>
-            <span class="sector-tag sector-科技">科技</span>
-          </td>
-          <td>346.65</td>
+            <div class="idx-chg c-up">+0.52%</div>
+          </div>
           
-          <td class="c-dn">-8.63</td>
-          <td class="c-dn">-2.43%</td>
-          <td>71.8M</td>
-          <td style="font-size:10px;">
-            
-              348.02 / 337.24
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:45%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">45%</span>
-            
-          </td>
-        </tr>
-        
-        
-        
-        <tr>
-          <td>
-            <span class="sym">MSFT</span>
-            <span class="sym-name">微软</span>
-            <span class="sector-tag sector-科技">科技</span>
-          </td>
-          <td>372.29</td>
           
-          <td class="c-up">+13.33</td>
-          <td class="c-up">+3.71%</td>
-          <td>20.8M</td>
-          <td style="font-size:10px;">
+          <div class="idx-cell">
+            <div class="idx-name">纳斯达克</div>
+            <div class="idx-num">22,017.85</div>
             
-              372.45 / 366.57
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:10%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">10%</span>
-            
-          </td>
-        </tr>
-        
-        
-        
-        <tr>
-          <td>
-            <span class="sym">GOOG</span>
-            <span class="sym-name">谷歌</span>
-            <span class="sector-tag sector-科技">科技</span>
-          </td>
-          <td>303.93</td>
+            <div class="idx-chg c-up">+0.63%</div>
+          </div>
           
-          <td class="c-up">+30.79</td>
-          <td class="c-up">+11.27%</td>
-          <td>16.9M</td>
-          <td style="font-size:10px;">
-            
-              304.10 / 295.43
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:77%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">77%</span>
-            
-          </td>
-        </tr>
-        
-        
-        
-        <tr>
-          <td>
-            <span class="sym">META</span>
-            <span class="sym-name">Meta</span>
-            <span class="sector-tag sector-科技">科技</span>
-          </td>
-          <td>575.05</td>
           
-          <td class="c-up">+38.67</td>
-          <td class="c-up">+7.21%</td>
-          <td>9.1M</td>
-          <td style="font-size:10px;">
+          <div class="idx-cell">
+            <div class="idx-name">道琼斯</div>
+            <div class="idx-num">46,584.46</div>
             
-              575.23 / 564.76
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:30%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">30%</span>
-            
-          </td>
-        </tr>
-        
-        
-        
-        <tr>
-          <td>
-            <span class="sym">QQQ</span>
-            <span class="sym-name">纳指ETF</span>
-            <span class="sector-tag sector-ETF">ETF</span>
-          </td>
-          <td>588.59</td>
+            <div class="idx-chg c-up">+0.17%</div>
+          </div>
           
-          <td class="c-up">+30.31</td>
-          <td class="c-up">+5.43%</td>
-          <td>46.3M</td>
-          <td style="font-size:10px;">
-            
-              588.98 / 578.40
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:78%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">78%</span>
-            
-          </td>
-        </tr>
-        
-        
-        
-        <tr>
-          <td>
-            <span class="sym">TSM</span>
-            <span class="sym-name">台积电</span>
-            <span class="sector-tag sector-半导体">半导体</span>
-          </td>
-          <td>345.32</td>
+        </div>
+        <div class="idx-row">
           
-          <td class="c-up">+28.82</td>
-          <td class="c-up">+9.11%</td>
-          <td>6.4M</td>
-          <td style="font-size:10px;">
-            
-              345.49 / 335.65
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:82%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">82%</span>
-            
-          </td>
-        </tr>
-        
-        
-        
-        <tr>
-          <td>
-            <span class="sym">AVGO</span>
-            <span class="sym-name">博通</span>
-            <span class="sector-tag sector-半导体">半导体</span>
-          </td>
-          <td>333.97</td>
           
-          <td class="c-up">+40.56</td>
-          <td class="c-up">+13.82%</td>
-          <td>32.7M</td>
-          <td style="font-size:10px;">
+          <div class="idx-cell">
+            <div class="idx-name">VIX恐慌指数</div>
+            <div class="idx-num">20.29</div>
             
-              334.15 / 321.80
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:69%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">69%</span>
-            
-          </td>
-        </tr>
-        
-        
-        
-        <tr>
-          <td>
-            <span class="sym">CRCL</span>
-            <span class="sym-name">Circle</span>
-            <span class="sector-tag sector-金融科技">金融科技</span>
-          </td>
-          <td>94.12</td>
+            <div class="idx-chg c-dn">-21.30%</div>
+          </div>
           
-          <td class="c-up">+4.21</td>
-          <td class="c-up">+4.68%</td>
-          <td>7.9M</td>
-          <td style="font-size:10px;">
-            
-              95.28 / 88.00
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:17%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">17%</span>
-            
-          </td>
-        </tr>
-        
-        
-        
-        <tr>
-          <td>
-            <span class="sym">HOOD</span>
-            <span class="sym-name">Robinhood</span>
-            <span class="sector-tag sector-金融科技">金融科技</span>
-          </td>
-          <td>69.65</td>
           
-          <td class="c-up">+4.49</td>
-          <td class="c-up">+6.89%</td>
-          <td>23.4M</td>
-          <td style="font-size:10px;">
+          <div class="idx-cell">
+            <div class="idx-name">美债10年期</div>
+            <div class="idx-num">4.34</div>
             
-              69.66 / 66.62
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:30%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">30%</span>
-            
-          </td>
-        </tr>
-        
-        
-        
-        <tr>
-          <td>
-            <span class="sym">BABA</span>
-            <span class="sym-name">阿里巴巴</span>
-            <span class="sector-tag sector-中概股">中概股</span>
-          </td>
-          <td>119.72</td>
+            <div class="idx-chg c-up">+0.18%</div>
+          </div>
           
-          <td class="c-dn">-2.26</td>
-          <td class="c-dn">-1.85%</td>
-          <td>10.3M</td>
-          <td style="font-size:10px;">
-            
-              121.98 / 117.94
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:24%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">24%</span>
-            
-          </td>
-        </tr>
-        
-        
-        
-        <tr>
-          <td>
-            <span class="sym">PDD</span>
-            <span class="sym-name">拼多多</span>
-            <span class="sector-tag sector-中概股">中概股</span>
-          </td>
-          <td>99.54</td>
           
-          <td class="c-up">+1.12</td>
-          <td class="c-up">+1.14%</td>
-          <td>4.8M</td>
-          <td style="font-size:10px;">
+          <div class="idx-cell">
+            <div class="idx-name">美元指数</div>
+            <div class="idx-num">98.86</div>
             
-              100.75 / 98.76
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:23%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">23%</span>
-            
-          </td>
-        </tr>
-        
-        
-        
-        <tr>
-          <td>
-            <span class="sym">V</span>
-            <span class="sym-name">Visa</span>
-            <span class="sector-tag sector-支付">支付</span>
-          </td>
-          <td>302.55</td>
+            <div class="idx-chg c-dn">-0.78%</div>
+          </div>
           
-          <td class="c-up">+3.01</td>
-          <td class="c-up">+1.00%</td>
-          <td>4.4M</td>
-          <td style="font-size:10px;">
-            
-              304.98 / 301.12
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:10%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">10%</span>
-            
-          </td>
-        </tr>
-        
-        
-        
-        <tr>
-          <td>
-            <span class="sym">MA</span>
-            <span class="sym-name">万事达</span>
-            <span class="sector-tag sector-支付">支付</span>
-          </td>
-          <td>498.28</td>
-          
-          <td class="c-up">+4.28</td>
-          <td class="c-up">+0.87%</td>
-          <td>3.6M</td>
-          <td style="font-size:10px;">
-            
-              502.60 / 495.67
-            
-          </td>
-          <td>
-            
-              
-              <div class="w52-bar"><div class="w52-dot" style="left:21%"></div></div>
-              <span style="font-size:9px;color:var(--text-3);margin-left:4px;">21%</span>
-            
-          </td>
-        </tr>
-        
-        
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Top Movers -->
-  <div class="stag">TOP MOVERS</div>
-  <div style="display:flex;gap:6px;margin-bottom:12px;">
-    <div style="flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;">
-      <div style="font-size:10px;color:var(--up);font-weight:600;margin-bottom:4px;">TOP GAINERS</div>
-      
-      <div style="display:flex;justify-content:space-between;padding:2px 0;font-size:11px;">
-        <span style="font-weight:600;">AVGO</span>
-        <span class="c-up" style="font-family:var(--font-mono);">+13.82%</span>
+        </div>
       </div>
-      
-      <div style="display:flex;justify-content:space-between;padding:2px 0;font-size:11px;">
-        <span style="font-weight:600;">GOOG</span>
-        <span class="c-up" style="font-family:var(--font-mono);">+11.27%</span>
-      </div>
-      
-      <div style="display:flex;justify-content:space-between;padding:2px 0;font-size:11px;">
-        <span style="font-weight:600;">TSM</span>
-        <span class="c-up" style="font-family:var(--font-mono);">+9.11%</span>
-      </div>
-      
-      <div style="display:flex;justify-content:space-between;padding:2px 0;font-size:11px;">
-        <span style="font-weight:600;">NVDA</span>
-        <span class="c-up" style="font-family:var(--font-mono);">+7.83%</span>
-      </div>
-      
-      <div style="display:flex;justify-content:space-between;padding:2px 0;font-size:11px;">
-        <span style="font-weight:600;">META</span>
-        <span class="c-up" style="font-family:var(--font-mono);">+7.21%</span>
-      </div>
-      
     </div>
-    <div style="flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;">
-      <div style="font-size:10px;color:var(--down);font-weight:600;margin-bottom:4px;">TOP LOSERS</div>
-      
-      <div style="display:flex;justify-content:space-between;padding:2px 0;font-size:11px;">
-        <span style="font-weight:600;">TSLA</span>
-        <span class="c-dn" style="font-family:var(--font-mono);">-2.43%</span>
-      </div>
-      
-      <div style="display:flex;justify-content:space-between;padding:2px 0;font-size:11px;">
-        <span style="font-weight:600;">BABA</span>
-        <span class="c-dn" style="font-family:var(--font-mono);">-1.85%</span>
-      </div>
-      
-    </div>
-  </div>
 
-  <!-- Footer -->
-  <div class="footer">
-    US.Monitor &mdash; Auto-generated at 2026-04-08 17:29:25
-  </div>
+    <!-- 板块表现 -->
+    <div class="ani" style="animation-delay:0.06s">
+      <div class="stag">SECTOR OVERVIEW</div>
+      <div class="sector-grid">
+        
+        <div class="sector-card">
+          <div class="sector-name">科技</div>
+          
+          <div class="sector-avg c-up">+5.06%</div>
+          <div class="sector-detail">6 只 ｜ 5 涨 1 跌</div>
+        </div>
+        
+        <div class="sector-card">
+          <div class="sector-name">ETF</div>
+          
+          <div class="sector-avg c-up">+5.43%</div>
+          <div class="sector-detail">1 只 ｜ 1 涨 0 跌</div>
+        </div>
+        
+        <div class="sector-card">
+          <div class="sector-name">半导体</div>
+          
+          <div class="sector-avg c-up">+11.46%</div>
+          <div class="sector-detail">2 只 ｜ 2 涨 0 跌</div>
+        </div>
+        
+        <div class="sector-card">
+          <div class="sector-name">金融科技</div>
+          
+          <div class="sector-avg c-up">+6.84%</div>
+          <div class="sector-detail">3 只 ｜ 3 涨 0 跌</div>
+        </div>
+        
+        <div class="sector-card">
+          <div class="sector-name">中概股</div>
+          
+          <div class="sector-avg c-dn">-0.36%</div>
+          <div class="sector-detail">2 只 ｜ 1 涨 1 跌</div>
+        </div>
+        
+        <div class="sector-card">
+          <div class="sector-name">支付</div>
+          
+          <div class="sector-avg c-up">+0.94%</div>
+          <div class="sector-detail">2 只 ｜ 2 涨 0 跌</div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- 持仓总览 -->
+    <div class="ani" style="animation-delay:0.09s">
+      <div class="stag">HOLDINGS</div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th style="text-align:left">股票</th>
+              <th>最新价</th>
+              <th>涨跌%</th>
+              <th>成交量</th>
+              <th>PE(TTM)</th>
+              <th>PE(Fwd)</th>
+              <th>PB</th>
+              <th>市值</th>
+              <th>股息率</th>
+              <th>52W位置</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            
+            
+            <tr>
+              <td>
+                <span>NVDA</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">英伟达</span>
+                <span class="sector-tag stag-科技">科技</span>
+              </td>
+              <td>178.10</td>
+              <td>
+                
+                <span class="pill pill-up">+7.83%</span>
+              </td>
+              <td>126.9M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:71%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">71%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>AAPL</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">苹果</span>
+                <span class="sector-tag stag-科技">科技</span>
+              </td>
+              <td>253.50</td>
+              <td>
+                
+                <span class="pill pill-up">+2.79%</span>
+              </td>
+              <td>61.4M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:70%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">70%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>TSLA</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">特斯拉</span>
+                <span class="sector-tag stag-科技">科技</span>
+              </td>
+              <td>346.65</td>
+              <td>
+                
+                <span class="pill pill-dn">-2.43%</span>
+              </td>
+              <td>71.8M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:45%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">45%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>MSFT</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">微软</span>
+                <span class="sector-tag stag-科技">科技</span>
+              </td>
+              <td>372.29</td>
+              <td>
+                
+                <span class="pill pill-up">+3.71%</span>
+              </td>
+              <td>20.8M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:10%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">10%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>GOOG</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">谷歌</span>
+                <span class="sector-tag stag-科技">科技</span>
+              </td>
+              <td>303.93</td>
+              <td>
+                
+                <span class="pill pill-up">+11.27%</span>
+              </td>
+              <td>16.9M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:77%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">77%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>META</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">Meta</span>
+                <span class="sector-tag stag-科技">科技</span>
+              </td>
+              <td>575.05</td>
+              <td>
+                
+                <span class="pill pill-up">+7.21%</span>
+              </td>
+              <td>9.1M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:30%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">30%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>QQQ</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">纳指ETF</span>
+                <span class="sector-tag stag-ETF">ETF</span>
+              </td>
+              <td>588.59</td>
+              <td>
+                
+                <span class="pill pill-up">+5.43%</span>
+              </td>
+              <td>46.3M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:78%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">78%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>TSM</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">台积电</span>
+                <span class="sector-tag stag-半导体">半导体</span>
+              </td>
+              <td>345.32</td>
+              <td>
+                
+                <span class="pill pill-up">+9.11%</span>
+              </td>
+              <td>6.4M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:82%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">82%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>AVGO</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">博通</span>
+                <span class="sector-tag stag-半导体">半导体</span>
+              </td>
+              <td>333.97</td>
+              <td>
+                
+                <span class="pill pill-up">+13.82%</span>
+              </td>
+              <td>32.7M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:69%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">69%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>COIN</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">Coinbase</span>
+                <span class="sector-tag stag-金融科技">金融科技</span>
+              </td>
+              <td>175.18</td>
+              <td>
+                
+                <span class="pill pill-up">+8.95%</span>
+              </td>
+              <td>7.3M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:11%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">11%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>CRCL</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">Circle</span>
+                <span class="sector-tag stag-金融科技">金融科技</span>
+              </td>
+              <td>94.12</td>
+              <td>
+                
+                <span class="pill pill-up">+4.68%</span>
+              </td>
+              <td>7.9M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:17%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">17%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>HOOD</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">Robinhood</span>
+                <span class="sector-tag stag-金融科技">金融科技</span>
+              </td>
+              <td>69.65</td>
+              <td>
+                
+                <span class="pill pill-up">+6.89%</span>
+              </td>
+              <td>23.4M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:30%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">30%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>BABA</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">阿里巴巴</span>
+                <span class="sector-tag stag-中概股">中概股</span>
+              </td>
+              <td>119.72</td>
+              <td>
+                
+                <span class="pill pill-dn">-1.85%</span>
+              </td>
+              <td>10.3M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:24%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">24%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>PDD</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">拼多多</span>
+                <span class="sector-tag stag-中概股">中概股</span>
+              </td>
+              <td>99.54</td>
+              <td>
+                
+                <span class="pill pill-up">+1.14%</span>
+              </td>
+              <td>4.8M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:23%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">23%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>V</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">Visa</span>
+                <span class="sector-tag stag-支付">支付</span>
+              </td>
+              <td>302.55</td>
+              <td>
+                
+                <span class="pill pill-up">+1.00%</span>
+              </td>
+              <td>4.4M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:10%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">10%</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            <tr>
+              <td>
+                <span>MA</span>
+                <span style="color:var(--text-3);font-size:9px;margin-left:3px;">万事达</span>
+                <span class="sector-tag stag-支付">支付</span>
+              </td>
+              <td>498.28</td>
+              <td>
+                
+                <span class="pill pill-up">+0.87%</span>
+              </td>
+              <td>3.6M</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                
+                
+                <div class="w52-bar"><div class="w52-dot" style="left:21%"></div></div>
+                <span style="font-size:9px;color:var(--text-3);margin-left:4px;">21%</span>
+                
+              </td>
+            </tr>
+            
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Top Movers -->
+    <div class="ani" style="animation-delay:0.12s">
+      <div class="stag">TOP MOVERS</div>
+      <div class="movers-row">
+        <div class="movers-card">
+          <div class="movers-title c-up">TOP GAINERS</div>
+          
+          <div class="movers-item"><span>AVGO 博通</span><span class="c-up">+13.82%</span></div>
+          
+          <div class="movers-item"><span>GOOG 谷歌</span><span class="c-up">+11.27%</span></div>
+          
+          <div class="movers-item"><span>TSM 台积电</span><span class="c-up">+9.11%</span></div>
+          
+          <div class="movers-item"><span>COIN Coinbase</span><span class="c-up">+8.95%</span></div>
+          
+          <div class="movers-item"><span>NVDA 英伟达</span><span class="c-up">+7.83%</span></div>
+          
+        </div>
+        <div class="movers-card">
+          <div class="movers-title c-dn">TOP LOSERS</div>
+          
+          <div class="movers-item"><span>TSLA 特斯拉</span><span class="c-dn">-2.43%</span></div>
+          
+          <div class="movers-item"><span>BABA 阿里巴巴</span><span class="c-dn">-1.85%</span></div>
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- 财报日历（晨报页简版） -->
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+
+  </div><!-- /sec-report -->
+
+  <!-- ====== SECTION: 持仓研究 ====== -->
+  <div id="sec-research" class="section-wrap">
+
+    <header class="hdr">
+      <div>
+        <div class="hdr-title"><em>US</em>.Monitor 持仓研究</div>
+        <div class="hdr-sub">科技 / 半导体 / 金融科技 / 中概股 / 支付 — 核心指标 — 财报日历 — 机构分析框架</div>
+      </div>
+    </header>
+
+    <div class="r-tabs">
+      <button class="r-tab active" onclick="switchRTab('rm')">核心指标对比</button>
+      <button class="r-tab" onclick="switchRTab('rc')">财报日历</button>
+      <button class="r-tab" onclick="switchRTab('rf')">机构分析框架</button>
+    </div>
+
+    <!-- Tab 1: 核心指标对比 -->
+    <div id="rp-rm" class="r-panel active">
+      <div class="r-card">
+        <div class="r-card-title">持仓公司核心指标横向对比</div>
+        <div class="tbl-wrap">
+          <table class="r-tbl" id="cmp-tbl">
+            <thead>
+              <tr>
+                <th class="r-sticky">指标</th>
+                
+                <th style="text-align:center;min-width:80px;">NVDA<br><span style="font-size:8px;color:var(--text-3)">英伟达</span></th>
+                
+                <th style="text-align:center;min-width:80px;">AAPL<br><span style="font-size:8px;color:var(--text-3)">苹果</span></th>
+                
+                <th style="text-align:center;min-width:80px;">TSLA<br><span style="font-size:8px;color:var(--text-3)">特斯拉</span></th>
+                
+                <th style="text-align:center;min-width:80px;">MSFT<br><span style="font-size:8px;color:var(--text-3)">微软</span></th>
+                
+                <th style="text-align:center;min-width:80px;">GOOG<br><span style="font-size:8px;color:var(--text-3)">谷歌</span></th>
+                
+                <th style="text-align:center;min-width:80px;">META<br><span style="font-size:8px;color:var(--text-3)">Meta</span></th>
+                
+                <th style="text-align:center;min-width:80px;">QQQ<br><span style="font-size:8px;color:var(--text-3)">纳指ETF</span></th>
+                
+                <th style="text-align:center;min-width:80px;">TSM<br><span style="font-size:8px;color:var(--text-3)">台积电</span></th>
+                
+                <th style="text-align:center;min-width:80px;">AVGO<br><span style="font-size:8px;color:var(--text-3)">博通</span></th>
+                
+                <th style="text-align:center;min-width:80px;">COIN<br><span style="font-size:8px;color:var(--text-3)">Coinbase</span></th>
+                
+                <th style="text-align:center;min-width:80px;">CRCL<br><span style="font-size:8px;color:var(--text-3)">Circle</span></th>
+                
+                <th style="text-align:center;min-width:80px;">HOOD<br><span style="font-size:8px;color:var(--text-3)">Robinhood</span></th>
+                
+                <th style="text-align:center;min-width:80px;">BABA<br><span style="font-size:8px;color:var(--text-3)">阿里巴巴</span></th>
+                
+                <th style="text-align:center;min-width:80px;">PDD<br><span style="font-size:8px;color:var(--text-3)">拼多多</span></th>
+                
+                <th style="text-align:center;min-width:80px;">V<br><span style="font-size:8px;color:var(--text-3)">Visa</span></th>
+                
+                <th style="text-align:center;min-width:80px;">MA<br><span style="font-size:8px;color:var(--text-3)">万事达</span></th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 实时行情 -->
+              <tr class="r-sect"><td class="r-sticky" colspan="17">实时行情</td></tr>
+              <tr><td class="r-sticky lbl">股价 ($)</td><td style="text-align:center">178.10</td><td style="text-align:center">253.50</td><td style="text-align:center">346.65</td><td style="text-align:center">372.29</td><td style="text-align:center">303.93</td><td style="text-align:center">575.05</td><td style="text-align:center">588.59</td><td style="text-align:center">345.32</td><td style="text-align:center">333.97</td><td style="text-align:center">175.18</td><td style="text-align:center">94.12</td><td style="text-align:center">69.65</td><td style="text-align:center">119.72</td><td style="text-align:center">99.54</td><td style="text-align:center">302.55</td><td style="text-align:center">498.28</td></tr>
+              <tr><td class="r-sticky lbl">涨跌%</td><td style="text-align:center" class="v-g">+7.83%</td><td style="text-align:center" class="v-g">+2.79%</td><td style="text-align:center" class="v-b">-2.43%</td><td style="text-align:center" class="v-g">+3.71%</td><td style="text-align:center" class="v-g">+11.27%</td><td style="text-align:center" class="v-g">+7.21%</td><td style="text-align:center" class="v-g">+5.43%</td><td style="text-align:center" class="v-g">+9.11%</td><td style="text-align:center" class="v-g">+13.82%</td><td style="text-align:center" class="v-g">+8.95%</td><td style="text-align:center" class="v-g">+4.68%</td><td style="text-align:center" class="v-g">+6.89%</td><td style="text-align:center" class="v-b">-1.85%</td><td style="text-align:center" class="v-g">+1.14%</td><td style="text-align:center" class="v-g">+1.00%</td><td style="text-align:center" class="v-g">+0.87%</td></tr>
+              <tr><td class="r-sticky lbl">市值</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td></tr>
+
+              <!-- 估值 -->
+              <tr class="r-sect"><td class="r-sticky" colspan="17">估值指标</td></tr>
+              
+              <tr>
+                <td class="r-sticky lbl">PE (TTM)</td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+              </tr>
+              
+              <tr>
+                <td class="r-sticky lbl">PE (Forward)</td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+              </tr>
+              
+              <tr>
+                <td class="r-sticky lbl">P/B</td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+              </tr>
+              
+              <tr>
+                <td class="r-sticky lbl">P/S</td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+              </tr>
+              
+              <tr>
+                <td class="r-sticky lbl">EV/EBITDA</td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+              </tr>
+              
+
+              <!-- 盈利能力 -->
+              <tr class="r-sect"><td class="r-sticky" colspan="17">盈利能力</td></tr>
+              
+              <tr>
+                <td class="r-sticky lbl">毛利率%</td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+              </tr>
+              
+              <tr>
+                <td class="r-sticky lbl">经营利润率%</td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+              </tr>
+              
+              <tr>
+                <td class="r-sticky lbl">净利润率%</td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+              </tr>
+              
+              <tr>
+                <td class="r-sticky lbl">ROE%</td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+              </tr>
+              
+              <tr>
+                <td class="r-sticky lbl">ROA%</td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+              </tr>
+              
+
+              <!-- 增长 -->
+              <tr class="r-sect"><td class="r-sticky" colspan="17">增长指标</td></tr>
+              
+              <tr>
+                <td class="r-sticky lbl">营收增速%</td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+              </tr>
+              
+              <tr>
+                <td class="r-sticky lbl">盈利增速%</td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+              </tr>
+              
+
+              <!-- 财务健康 -->
+              <tr class="r-sect"><td class="r-sticky" colspan="17">财务健康</td></tr>
+              <tr>
+                <td class="r-sticky lbl">负债/权益</td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+              </tr>
+              <tr>
+                <td class="r-sticky lbl">Beta</td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center"><span class="na-cell">-</span></td>
+                
+              </tr>
+
+              <!-- 股东回报 -->
+              <tr class="r-sect"><td class="r-sticky" colspan="17">股东回报</td></tr>
+              
+              <tr>
+                <td class="r-sticky lbl">股息率%</td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+              </tr>
+              
+              <tr>
+                <td class="r-sticky lbl">派息率%</td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+                <td style="text-align:center" class=""><span class="na-cell">-</span></td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: 财报日历 -->
+    <div id="rp-rc" class="r-panel">
+      <div class="r-card">
+        <div class="r-card-title">财报发布日历</div>
+        <div class="tbl-wrap">
+          <table class="r-tbl">
+            <thead><tr><th>股票</th><th>板块</th><th>下次财报日期</th></tr></thead>
+            <tbody>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">NVDA 英伟达</td>
+                <td><span class="sector-tag stag-科技">科技</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">AAPL 苹果</td>
+                <td><span class="sector-tag stag-科技">科技</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">TSLA 特斯拉</td>
+                <td><span class="sector-tag stag-科技">科技</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">MSFT 微软</td>
+                <td><span class="sector-tag stag-科技">科技</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">GOOG 谷歌</td>
+                <td><span class="sector-tag stag-科技">科技</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">META Meta</td>
+                <td><span class="sector-tag stag-科技">科技</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">QQQ 纳指ETF</td>
+                <td><span class="sector-tag stag-ETF">ETF</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">TSM 台积电</td>
+                <td><span class="sector-tag stag-半导体">半导体</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">AVGO 博通</td>
+                <td><span class="sector-tag stag-半导体">半导体</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">COIN Coinbase</td>
+                <td><span class="sector-tag stag-金融科技">金融科技</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">CRCL Circle</td>
+                <td><span class="sector-tag stag-金融科技">金融科技</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">HOOD Robinhood</td>
+                <td><span class="sector-tag stag-金融科技">金融科技</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">BABA 阿里巴巴</td>
+                <td><span class="sector-tag stag-中概股">中概股</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">PDD 拼多多</td>
+                <td><span class="sector-tag stag-中概股">中概股</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">V Visa</td>
+                <td><span class="sector-tag stag-支付">支付</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+              <tr>
+                <td class="lbl" style="font-weight:600;color:var(--text-1)">MA 万事达</td>
+                <td><span class="sector-tag stag-支付">支付</span></td>
+                <td style="font-family:var(--font-mono)">待确认</td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: 机构分析框架 -->
+    <div id="rp-rf" class="r-panel">
+      <div class="fw-grid">
+
+        <!-- 科技巨头 -->
+        <div class="fw-card">
+          <h3><span class="fw-badge" style="background:var(--blue-dim);color:var(--blue)">科技</span> 大型科技股分析框架</h3>
+          <div class="mg"><h5>核心财务 CORE FINANCIALS</h5>
+            <ul class="ml">
+              <li><span class="star">*</span> 营收增速 Revenue Growth（YoY/QoQ）</li>
+              <li><span class="star">*</span> 经营利润率 Operating Margin</li>
+              <li>自由现金流 FCF / FCF Yield</li>
+              <li>研发费用占比 R&D/Revenue</li>
+              <li>资本回报率 ROIC</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>估值 VALUATION</h5>
+            <ul class="ml">
+              <li><span class="star">*</span> PE Forward（对比增速 → PEG）</li>
+              <li>EV/EBITDA</li>
+              <li>P/S（高增长阶段参考）</li>
+              <li>DCF 自由现金流折现</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>增长引擎 GROWTH DRIVERS</h5>
+            <ul class="ml">
+              <li>AI/Cloud 收入占比与增速</li>
+              <li>广告/订阅/硬件各业务线拆分</li>
+              <li>用户指标：DAU/MAU/ARPU</li>
+              <li>CapEx 趋势（AI基础设施投入）</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>前瞻 FORWARD LOOKING</h5>
+            <ul class="ml">
+              <li>管理层指引 vs 市场预期</li>
+              <li>AI商业化变现节奏</li>
+              <li>反垄断监管风险</li>
+              <li>回购计划 + 股息政策</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 半导体 -->
+        <div class="fw-card">
+          <h3><span class="fw-badge" style="background:var(--purple-dim);color:var(--purple)">半导体</span> 半导体分析框架</h3>
+          <div class="mg"><h5>核心财务 CORE FINANCIALS</h5>
+            <ul class="ml">
+              <li><span class="star">*</span> 毛利率 Gross Margin（产品结构/定价力）</li>
+              <li><span class="star">*</span> 营收增速（周期性判断）</li>
+              <li>经营利润率 / EBITDA Margin</li>
+              <li>CapEx/Revenue（扩产周期判断）</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>估值 VALUATION</h5>
+            <ul class="ml">
+              <li><span class="star">*</span> PE Forward + PEG</li>
+              <li>EV/EBITDA（跨周期比较）</li>
+              <li>P/S（周期底部参考）</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>行业指标 INDUSTRY</h5>
+            <ul class="ml">
+              <li>制程节点领先度（TSM）</li>
+              <li>库存天数 Inventory Days</li>
+              <li>产能利用率</li>
+              <li>AI芯片/数据中心收入占比</li>
+              <li>客户集中度</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>前瞻 FORWARD LOOKING</h5>
+            <ul class="ml">
+              <li>AI需求周期 vs 传统半导体周期</li>
+              <li>地缘政治/出口管制影响</li>
+              <li>先进封装/CoWoS产能</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 金融科技 -->
+        <div class="fw-card">
+          <h3><span class="fw-badge" style="background:var(--orange-dim);color:var(--orange)">金融科技</span> 金融科技/加密分析框架</h3>
+          <div class="mg"><h5>核心财务 CORE FINANCIALS</h5>
+            <ul class="ml">
+              <li><span class="star">*</span> 交易收入 vs 订阅收入（结构转型）</li>
+              <li><span class="star">*</span> Take Rate / 费率</li>
+              <li>营收增速</li>
+              <li>调整后EBITDA / EBITDA Margin</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>运营指标 OPERATIONS</h5>
+            <ul class="ml">
+              <li><span class="star">*</span> MAU/DAU（用户增长）</li>
+              <li>交易量 Trading Volume</li>
+              <li>AUC 托管资产（COIN）</li>
+              <li>USDC流通量（CRCL）</li>
+              <li>PFOF收入占比（HOOD）</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>估值 VALUATION</h5>
+            <ul class="ml">
+              <li>P/S（亏损期）/ PE Forward（盈利期）</li>
+              <li>EV/Revenue</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>前瞻 FORWARD LOOKING</h5>
+            <ul class="ml">
+              <li>加密监管政策（SEC/ETF审批）</li>
+              <li>BTC价格相关性</li>
+              <li>稳定币监管框架</li>
+              <li>IPO（Circle）/ 新业务线拓展</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 中概股 -->
+        <div class="fw-card">
+          <h3><span class="fw-badge" style="background:var(--down-bg);color:var(--down)">中概股</span> 中概股分析框架</h3>
+          <div class="mg"><h5>核心财务 CORE FINANCIALS</h5>
+            <ul class="ml">
+              <li><span class="star">*</span> 营收增速（核心电商 vs 新业务）</li>
+              <li><span class="star">*</span> 调整后净利润率</li>
+              <li>FCF / FCF Yield</li>
+              <li>Non-GAAP vs GAAP差异</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>运营指标 OPERATIONS</h5>
+            <ul class="ml">
+              <li>GMV增速 / 订单量</li>
+              <li>用户数 AAC / MAU</li>
+              <li>ARPU / 货币化率</li>
+              <li>海外业务（Temu/Lazada）增速</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>估值 VALUATION</h5>
+            <ul class="ml">
+              <li><span class="star">*</span> SOTP分部估值（核心电商+云+物流+投资）</li>
+              <li>PE Forward / PEG</li>
+              <li>EV/EBITDA</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>前瞻 FORWARD LOOKING</h5>
+            <ul class="ml">
+              <li>中美关系/退市风险/VIE结构</li>
+              <li>中国消费复苏力度</li>
+              <li>回购+股息回馈力度</li>
+              <li>AI投入（阿里云/大模型）</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 支付 -->
+        <div class="fw-card">
+          <h3><span class="fw-badge" style="background:var(--cyan-dim);color:var(--cyan)">支付</span> 支付网络分析框架</h3>
+          <div class="mg"><h5>核心财务 CORE FINANCIALS</h5>
+            <ul class="ml">
+              <li><span class="star">*</span> 净收入增速 Net Revenue Growth</li>
+              <li><span class="star">*</span> 经营利润率（V>60%, MA>50%）</li>
+              <li>EPS增速</li>
+              <li>FCF / FCF Conversion</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>运营指标 OPERATIONS</h5>
+            <ul class="ml">
+              <li><span class="star">*</span> Payment Volume Growth（跨境+国内）</li>
+              <li>Transactions Processed</li>
+              <li>Cross-border Volume（高费率）</li>
+              <li>Value-added Services 增速</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>估值 VALUATION</h5>
+            <ul class="ml">
+              <li>PE Forward（V/MA 长期20-25x）</li>
+              <li>PEG</li>
+              <li>FCF Yield</li>
+            </ul>
+          </div>
+          <div class="mg"><h5>前瞻 FORWARD LOOKING</h5>
+            <ul class="ml">
+              <li>无现金化趋势 / 新兴市场渗透</li>
+              <li>实时支付 RTP 竞争</li>
+              <li>稳定币/CBDC对网络的影响</li>
+              <li>B2B支付增长（高价值）</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /sec-research -->
+
+  <div class="ftr">US.Monitor &mdash; Auto-generated 2026-04-08 17:48:09</div>
 </div>
+
+<script>
+function switchSection(id) {
+  document.querySelectorAll('.section-wrap').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.gnav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+function switchRTab(id) {
+  document.querySelectorAll('.r-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.r-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('rp-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+// 自动高亮对比表中最佳/最差值
+(function colorCmpTable(){
+  const tbl = document.getElementById('cmp-tbl');
+  if (!tbl) return;
+  const higherBetter = ['毛利率','经营利润率','净利润率','ROE','ROA','营收增速','盈利增速','股息率'];
+  const lowerBetter = ['PE (TTM)','PE (Forward)','P/B','P/S','EV/EBITDA','负债/权益'];
+  tbl.querySelectorAll('tbody tr').forEach(row => {
+    if (row.classList.contains('r-sect')) return;
+    const label = row.querySelector('.lbl');
+    if (!label) return;
+    const lbl = label.textContent.replace(/%/g,'').trim();
+    const cells = Array.from(row.querySelectorAll('td')).slice(1);
+    const vals = cells.map(c => {const t=c.textContent.trim().replace(/[+%,]/g,''); return t==='-'||t===''?null:parseFloat(t);});
+    const numVals = vals.filter(v => v !== null);
+    if (numVals.length < 2) return;
+    const isHB = higherBetter.some(h => lbl.includes(h));
+    const isLB = lowerBetter.some(l => lbl.includes(l));
+    if (!isHB && !isLB) return;
+    const best = isHB ? Math.max(...numVals) : Math.min(...numVals.filter(v=>v>0));
+    cells.forEach((c,i) => { if (vals[i] === best) c.classList.add('v-best'); });
+  });
+})();
+</script>
 </body>
 </html>
