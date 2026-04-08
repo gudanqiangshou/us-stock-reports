@@ -168,8 +168,8 @@
 
   <!-- GLOBAL NAV -->
   <div class="gnav">
-    <button class="gnav-btn active" onclick="switchSection('report')">投资晨报</button>
-    <button class="gnav-btn" onclick="switchSection('research')">持仓研究</button>
+    <button class="gnav-btn active" onclick="switchSection('report',this)">投资晨报</button>
+    <button class="gnav-btn" onclick="switchSection('research',this)">持仓研究</button>
   </div>
 
   <!-- ====== SECTION: 投资晨报 ====== -->
@@ -180,7 +180,7 @@
         <div class="hdr-title"><em>US</em>.Monitor 投资晨报</div>
         <div class="hdr-sub">2026-04-07 周三 收盘数据</div>
       </div>
-      <div class="hdr-right">报告日期 2026-04-08<br>生成时间 2026-04-08 18:39:46</div>
+      <div class="hdr-right">报告日期 2026-04-08<br>生成时间 2026-04-08 18:49:11</div>
     </header>
 
     <!-- 市场指数 -->
@@ -219,9 +219,9 @@
           
           <div class="idx-cell">
             <div class="idx-name">VIX恐慌指数</div>
-            <div class="idx-num">20.54</div>
+            <div class="idx-num">20.42</div>
             
-            <div class="idx-chg c-dn">-20.33%</div>
+            <div class="idx-chg c-dn">-20.79%</div>
           </div>
           
           
@@ -1025,9 +1025,9 @@
     </header>
 
     <div class="r-tabs">
-      <button class="r-tab active" onclick="switchRTab('rm')">核心指标对比</button>
-      <button class="r-tab" onclick="switchRTab('rc')">财报日历</button>
-      <button class="r-tab" onclick="switchRTab('rf')">机构分析框架</button>
+      <button class="r-tab active" onclick="switchRTab('rm',this)">核心指标对比</button>
+      <button class="r-tab" onclick="switchRTab('rc',this)">财报日历</button>
+      <button class="r-tab" onclick="switchRTab('rf',this)">机构分析框架</button>
     </div>
 
     <!-- Tab 1: 核心指标对比 -->
@@ -1806,10 +1806,7 @@
                 <td class="lbl" style="font-weight:600;color:var(--text-1)">TSM 台积电</td>
                 <td><span class="sector-tag stag-半导体">半导体</span></td>
                 
-                <td style="background:var(--gold-dim);border-radius:3px;">
-                  <a href="https://finance.yahoo.com/quote/TSM/financials/" target="_blank" style="color:var(--gold)">2026-04-16</a>
-                </td>
-                <td>$3.3</td>
+                <td style="color:var(--text-3)">待确认</td><td>-</td>
                 
               </tr>
               
@@ -2794,147 +2791,6 @@
         
         
         
-        
-        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:12px;">
-          <h4 style="font-family:var(--font-head);font-size:12px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
-            <span class="sector-tag stag-半导体">半导体</span>
-            TSM 台积电
-            <a href="https://finance.yahoo.com/quote/TSM/financials/" target="_blank" style="font-size:10px;color:var(--blue);padding:2px 7px;border:1px solid rgba(74,144,255,0.2);border-radius:4px;margin-left:auto;">Yahoo Finance</a>
-          </h4>
-          <table style="width:100%;border-collapse:collapse;">
-            <thead>
-              <tr>
-                <th style="text-align:left;padding:4px 6px;font-size:9px;color:var(--text-3);border-bottom:1px solid var(--border)">财报日期</th>
-                <th style="padding:4px 6px;font-size:9px;color:var(--text-3);border-bottom:1px solid var(--border)">EPS预期</th>
-                <th style="padding:4px 6px;font-size:9px;color:var(--text-3);border-bottom:1px solid var(--border)">EPS实际</th>
-                <th style="padding:4px 6px;font-size:9px;color:var(--text-3);border-bottom:1px solid var(--border)">Surprise</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;border-bottom:1px solid var(--border);background:var(--gold-dim);border-radius:3px;color:var(--gold);font-weight:600;">
-                  2026-04-16 (预计)
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $3.3
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  -
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border);">
-                  -
-                </td>
-              </tr>
-              
-              <tr>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;border-bottom:1px solid var(--border);">
-                  2026-01-15 ✓
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $2.98
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $3.14
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border);color:var(--up)">
-                  +5.5%
-                </td>
-              </tr>
-              
-              <tr>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;border-bottom:1px solid var(--border);">
-                  2025-10-15 ✓
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $2.63
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $2.92
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border);color:var(--up)">
-                  +11.2%
-                </td>
-              </tr>
-              
-              <tr>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;border-bottom:1px solid var(--border);">
-                  2025-07-17 ✓
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $2.31
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $2.47
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border);color:var(--up)">
-                  +6.8%
-                </td>
-              </tr>
-              
-              <tr>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;border-bottom:1px solid var(--border);">
-                  2025-04-17 ✓
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $2.05
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $2.12
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border);color:var(--up)">
-                  +3.2%
-                </td>
-              </tr>
-              
-              <tr>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;border-bottom:1px solid var(--border);">
-                  2025-01-16 ✓
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $2.22
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $2.24
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border);color:var(--up)">
-                  +0.7%
-                </td>
-              </tr>
-              
-              <tr>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;border-bottom:1px solid var(--border);">
-                  2024-10-17 ✓
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $1.79
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $1.94
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border);color:var(--up)">
-                  +8.4%
-                </td>
-              </tr>
-              
-              <tr>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;border-bottom:1px solid var(--border);">
-                  2024-07-18 ✓
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $1.42
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border)">
-                  $1.48
-                </td>
-                <td style="padding:3px 6px;font-family:var(--font-mono);font-size:11px;text-align:center;border-bottom:1px solid var(--border);color:var(--up)">
-                  +4.0%
-                </td>
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
         
         
         
@@ -4224,21 +4080,21 @@
 
   </div><!-- /sec-research -->
 
-  <div class="ftr">US.Monitor &mdash; Auto-generated 2026-04-08 18:39:46</div>
+  <div class="ftr">US.Monitor &mdash; Auto-generated 2026-04-08 18:49:11</div>
 </div>
 
 <script>
-function switchSection(id) {
+function switchSection(id, el) {
   document.querySelectorAll('.section-wrap').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.gnav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('sec-' + id).classList.add('active');
-  event.target.classList.add('active');
+  el.classList.add('active');
 }
-function switchRTab(id) {
+function switchRTab(id, el) {
   document.querySelectorAll('.r-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.r-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('rp-' + id).classList.add('active');
-  event.target.classList.add('active');
+  el.classList.add('active');
 }
 // ── Chart.js 图表 ──
 (function(){
