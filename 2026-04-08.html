@@ -7,6 +7,7 @@
   <title>US.Monitor 2026-04-08</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     :root {
       --bg: #08090f; --bg-card: #10131c; --bg-card-hover: #161a28;
@@ -151,6 +152,13 @@
       .sector-grid { grid-template-columns: repeat(2, 1fr); } .fw-grid { grid-template-columns: 1fr; }
       .movers-row { flex-direction: column; }
     }
+    /* ── Charts grid ── */
+    .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .ch-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 8px; }
+    .ch-card h4 { font-family: var(--font-head); font-size: 10px; font-weight: 600; color: var(--text-3); margin-bottom: 6px; letter-spacing: 0.3px; }
+    .ch-wrap { position: relative; height: 200px; }
+    @media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } .ch-wrap { height: 220px; } }
+
     @keyframes slideIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     .ani { animation: slideIn 0.35s ease-out forwards; opacity: 0; }
   </style>
@@ -172,7 +180,7 @@
         <div class="hdr-title"><em>US</em>.Monitor 投资晨报</div>
         <div class="hdr-sub">2026-04-07 周三 收盘数据</div>
       </div>
-      <div class="hdr-right">报告日期 2026-04-08<br>生成时间 2026-04-08 17:50:10</div>
+      <div class="hdr-right">报告日期 2026-04-08<br>生成时间 2026-04-08 18:04:20</div>
     </header>
 
     <!-- 市场指数 -->
@@ -211,9 +219,9 @@
           
           <div class="idx-cell">
             <div class="idx-name">VIX恐慌指数</div>
-            <div class="idx-num">20.35</div>
+            <div class="idx-num">20.39</div>
             
-            <div class="idx-chg c-dn">-21.06%</div>
+            <div class="idx-chg c-dn">-20.91%</div>
           </div>
           
           
@@ -227,9 +235,9 @@
           
           <div class="idx-cell">
             <div class="idx-name">美元指数</div>
-            <div class="idx-num">98.86</div>
+            <div class="idx-num">98.87</div>
             
-            <div class="idx-chg c-dn">-0.78%</div>
+            <div class="idx-chg c-dn">-0.77%</div>
           </div>
           
         </div>
@@ -776,8 +784,58 @@
       </div>
     </div>
 
-    <!-- Top Movers -->
+    <!-- 图表区域 -->
     <div class="ani" style="animation-delay:0.12s">
+      <div class="stag">CHARTS</div>
+      <div class="charts-grid">
+
+        <!-- 1. 区间涨跌幅 -->
+        <div class="ch-card">
+          <h4>区间涨跌幅 PERIOD RETURNS</h4>
+          <div class="ch-wrap"><canvas id="chartReturns"></canvas></div>
+        </div>
+
+        <!-- 2. PE Forward -->
+        <div class="ch-card">
+          <h4>PE Forward 估值</h4>
+          <div class="ch-wrap"><canvas id="chartPE"></canvas></div>
+        </div>
+
+        <!-- 3. P/S 市销率 -->
+        <div class="ch-card">
+          <h4>P/S 市销率</h4>
+          <div class="ch-wrap"><canvas id="chartPS"></canvas></div>
+        </div>
+
+        <!-- 4. 毛利率 -->
+        <div class="ch-card">
+          <h4>毛利率 Gross Margin (%)</h4>
+          <div class="ch-wrap"><canvas id="chartGM"></canvas></div>
+        </div>
+
+        <!-- 5. ROE -->
+        <div class="ch-card">
+          <h4>ROE 净资产收益率 (%)</h4>
+          <div class="ch-wrap"><canvas id="chartROE"></canvas></div>
+        </div>
+
+        <!-- 6. 营收增长率 -->
+        <div class="ch-card">
+          <h4>营收增长率 Revenue Growth (%)</h4>
+          <div class="ch-wrap"><canvas id="chartRevGrowth"></canvas></div>
+        </div>
+
+        <!-- 7. FCF Yield -->
+        <div class="ch-card" style="grid-column: span 2;">
+          <h4>FCF Yield 自由现金流收益率 (%)</h4>
+          <div class="ch-wrap"><canvas id="chartFCF"></canvas></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Top Movers -->
+    <div class="ani" style="animation-delay:0.15s">
       <div class="stag">TOP MOVERS</div>
       <div class="movers-row">
         <div class="movers-card">
@@ -1939,7 +1997,7 @@
 
   </div><!-- /sec-research -->
 
-  <div class="ftr">US.Monitor &mdash; Auto-generated 2026-04-08 17:50:10</div>
+  <div class="ftr">US.Monitor &mdash; Auto-generated 2026-04-08 18:04:20</div>
 </div>
 
 <script>
@@ -1955,6 +2013,96 @@ function switchRTab(id) {
   document.getElementById('rp-' + id).classList.add('active');
   event.target.classList.add('active');
 }
+// ── Chart.js 图表 ──
+(function(){
+  const COLORS = [
+    '#4a90ff','#9b6dff','#00d4aa','#ff9f43','#ff4d6a','#00c9db',
+    '#e5a91a','#e06cff','#5ddb6d','#ff6b8a','#6bb5ff','#c4a35a',
+    '#ff8855','#44ddcc','#aa77ff','#ee5577'
+  ];
+  const chartFont = { family: "'JetBrains Mono', monospace", size: 9 };
+  const gridColor = 'rgba(26,30,46,0.8)';
+  const defaults = {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { titleFont: chartFont, bodyFont: chartFont, cornerRadius: 4 }
+    },
+    scales: {
+      x: { ticks: { font: chartFont, color: '#555c72', maxRotation: 45 }, grid: { display: false } },
+      y: { ticks: { font: chartFont, color: '#555c72' }, grid: { color: gridColor } }
+    }
+  };
+
+  // 数据注入 (Jinja2)
+  const symbols = ["NVDA", "AAPL", "TSLA", "MSFT", "GOOG", "META", "QQQ", "TSM", "AVGO", "COIN", "CRCL", "HOOD", "BABA", "PDD", "V", "MA"];
+  const periodReturns = {"AAPL": {"1M": -1.54, "1Y": 25.3, "2Y": 51.51, "3M": -5.06, "3Y": null}, "AVGO": {"1M": 1.27, "1Y": 118.61, "2Y": 154.56, "3M": -2.55, "3Y": null}, "BABA": {"1M": -8.46, "1Y": -5.87, "2Y": 70.68, "3M": -23.38, "3Y": null}, "COIN": {"1M": -11.18, "1Y": 2.59, "2Y": -28.74, "3M": -31.28, "3Y": null}, "CRCL": {"1M": -7.64, "1Y": null, "2Y": null, "3M": 10.99, "3Y": null}, "GOOG": {"1M": 1.96, "1Y": 99.82, "2Y": 96.59, "3M": -4.15, "3Y": null}, "HOOD": {"1M": -9.65, "1Y": 82.04, "2Y": 262.76, "3M": -43.48, "3Y": null}, "MA": {"1M": -4.61, "1Y": -5.54, "2Y": 5.13, "3M": -12.23, "3Y": null}, "META": {"1M": -10.75, "1Y": 8.51, "2Y": 16.4, "3M": -12.64, "3Y": null}, "MSFT": {"1M": -8.97, "1Y": 0.54, "2Y": -10.31, "3M": -21.09, "3Y": null}, "NVDA": {"1M": 0.16, "1Y": 74.99, "2Y": 99.21, "3M": -5.32, "3Y": null}, "PDD": {"1M": -2.38, "1Y": -12.43, "2Y": -15.82, "3M": -16.44, "3Y": null}, "QQQ": {"1M": -1.74, "1Y": 31.24, "2Y": 34.9, "3M": -4.64, "3Y": null}, "TSLA": {"1M": -12.62, "1Y": 29.7, "2Y": 108.04, "3M": -23.25, "3Y": null}, "TSM": {"1M": 2.18, "1Y": 122.14, "2Y": 152.81, "3M": 7.46, "3Y": null}, "V": {"1M": -4.67, "1Y": -10.19, "2Y": 10.29, "3M": -14.31, "3Y": null}};
+  const peForward = [16.02, 27.18, 123.34, 19.76, 22.63, 15.99, null, 19.26, 18.72, 31.34, 38.2, 25.34, 15.45, 7.03, 20.81, 21.99];
+  const psRatio = [20.05, 8.55, 13.72, 9.06, 9.13, 7.24, null, 0.47, 23.19, 6.86, 9.11, 14.02, 0.28, 0.33, 14.09, 13.56];
+  const grossMargin = [71.07, 47.33, 18.03, 68.59, 59.65, 82.0, null, 59.89, 76.73, 85.18, 8.67, 92.38, 40.76, 56.28, 97.78, 100.0];
+  const roe = [101.48, 152.02, 4.93, 34.39, 35.71, 30.24, null, 35.06, 33.37, 10.05, -2.76, 21.99, 8.23, 27.29, 53.95, 209.91];
+  const revGrowth = [73.2, 15.7, -3.1, 16.7, 18.0, 23.8, null, 20.5, 29.5, -22.2, 76.9, 26.5, 1.7, 12.0, 14.6, 17.6];
+  const fcfYield = [1.34, 2.85, 0.29, 1.94, 1.04, 1.61, null, 35.93, 1.61, 2.75, -0.36, null, -9.14, 58.88, 3.78, 3.66];
+
+  // Helper: 单指标柱状图
+  function barChart(canvasId, labels, values, colorFn) {
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) return;
+    const colors = values.map((v,i) => colorFn ? colorFn(v,i) : COLORS[i % COLORS.length]);
+    new Chart(ctx, {
+      type: 'bar',
+      data: { labels, datasets: [{ data: values.map(v => v === null ? 0 : v), backgroundColor: colors, borderRadius: 3, maxBarThickness: 32 }] },
+      options: { ...defaults }
+    });
+  }
+
+  // Helper: 正负色
+  function upDownColor(v) { return v > 0 ? '#00d4aa' : v < 0 ? '#ff4d6a' : '#555c72'; }
+
+  // 1. 区间涨跌幅 (grouped bar: 1M/3M/1Y/2Y/3Y)
+  (function(){
+    const ctx = document.getElementById('chartReturns');
+    if (!ctx) return;
+    const periods = ['1M','3M','1Y','2Y','3Y'];
+    const pColors = ['#4a90ff','#9b6dff','#e5a91a','#00d4aa','#ff9f43'];
+    const datasets = periods.map((p, pi) => ({
+      label: p,
+      data: symbols.map(s => (periodReturns[s] && periodReturns[s][p] !== null) ? periodReturns[s][p] : 0),
+      backgroundColor: pColors[pi] + '99',
+      borderRadius: 2, maxBarThickness: 12
+    }));
+    new Chart(ctx, {
+      type: 'bar',
+      data: { labels: symbols, datasets },
+      options: {
+        ...defaults,
+        plugins: {
+          ...defaults.plugins,
+          legend: { display: true, position: 'top', labels: { font: chartFont, color: '#8b92a8', boxWidth: 10, padding: 8 } }
+        }
+      }
+    });
+  })();
+
+  // 2. PE Forward
+  barChart('chartPE', symbols, peForward, (v,i) => COLORS[i % COLORS.length]);
+
+  // 3. P/S
+  barChart('chartPS', symbols, psRatio, (v,i) => COLORS[i % COLORS.length]);
+
+  // 4. 毛利率
+  barChart('chartGM', symbols, grossMargin, (v,i) => COLORS[i % COLORS.length]);
+
+  // 5. ROE
+  barChart('chartROE', symbols, roe, (v,i) => COLORS[i % COLORS.length]);
+
+  // 6. 营收增长率
+  barChart('chartRevGrowth', symbols, revGrowth, (v) => upDownColor(v));
+
+  // 7. FCF Yield
+  barChart('chartFCF', symbols, fcfYield, (v) => upDownColor(v));
+})();
+
 // 自动高亮对比表中最佳/最差值
 (function colorCmpTable(){
   const tbl = document.getElementById('cmp-tbl');
